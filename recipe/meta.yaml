@@ -1,0 +1,59 @@
+{% set name = "opendatalab" %}
+{% set version = "0.0.10" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.gz
+  sha256: 9b1382f974bd76a961747dc33308fce5b024d337c02cf3acb728c64952ca9aaf
+
+build:
+  skip: true  # [py<37]
+  entry_points:
+    - odl = opendatalab.cli.cmd:cli
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+  number: 0
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+    - pycryptodome
+    - click >=7.0.0
+    - requests >=2.4.2
+    - tqdm
+    - colorama
+    - rich
+    - openxlab
+    - pywin32-on-windows  # [win]
+
+test:
+  imports:
+    - opendatalab
+  commands:
+    - pip check
+    - odl --help
+  requires:
+    - pip
+
+about:
+  home: https://github.com/opendatalab/opendatalab-python-sdk
+  summary: OpenDataLab Python SDK
+  description: |
+    OpenDataLab Python SDK is a python library to access Opendatalab and use open datasets.
+    It provides:
+      * A pythonic way to access opendatalab resources.
+      * A convenient CLI tool odl to access open datasets.
+  license: MIT
+  license_file: LICENSE
+  license_family: MIT
+  doc_url: https://github.com/opendatalab/opendatalab-python-sdk
+  dev_url: https://github.com/opendatalab/opendatalab-python-sdk
+
+extra:
+  recipe-maintainers:
+    - boldorider4
